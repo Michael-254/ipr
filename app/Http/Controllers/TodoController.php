@@ -25,7 +25,7 @@ class TodoController extends Controller
 {
   public function __construct()
   {
-    $this->middleware('auth');
+    $this->middleware(['auth', 'verified']);
   }
   //user
   public function todos()
@@ -135,7 +135,7 @@ class TodoController extends Controller
   //SLO
   public function kiambereSLO()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -156,7 +156,7 @@ class TodoController extends Controller
 
   public function nyongoroSLO()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -177,7 +177,7 @@ class TodoController extends Controller
 
   public function forksSLO()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -198,7 +198,7 @@ class TodoController extends Controller
   //slm
   public function kiambere()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -219,7 +219,7 @@ class TodoController extends Controller
 
   public function nyongoro()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -239,7 +239,7 @@ class TodoController extends Controller
 
   public function forks()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -259,7 +259,7 @@ class TodoController extends Controller
 
   public function dokolo()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -278,7 +278,7 @@ class TodoController extends Controller
   public function showSLM($id)
   {
     $users = User::where('hod', true)->get();
-    $user = Auth::user();
+    $user = auth()->user();
     $todos = todo::find($id);
     return view('todos.showSLM')->with(['todos' => $todos, 'user' => $user, 'users' => $users]);
   }
@@ -334,7 +334,7 @@ class TodoController extends Controller
   //HOD
   public function forestry()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -362,7 +362,7 @@ class TodoController extends Controller
 
   public function operation()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -394,7 +394,7 @@ class TodoController extends Controller
 
   public function communication()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -412,9 +412,39 @@ class TodoController extends Controller
     return view('todos.hodT')->with(['todos' => $todos]);
   }
 
+  public function ME()
+  {
+    if (auth()->user()->hod != True) {
+      return redirect()->back()->with('error', 'Denied Access');
+    }
+    $todos = todo::where([
+      ['initiator_site', '=', 'Head Office'],
+      ['status', '=', 'pending'],
+      ['department', '=', 'M&E'],
+    ])
+      ->orWhere([
+        ['initiator_site', '=', 'Kampala'],
+        ['status', '=', 'pending'],
+        ['department', '=', 'M&E'],
+      ])
+      ->orWhere([
+        ['initiator_site', '=', 'Head Office'],
+        ['department', '=', 'M&E'],
+        ['status', '=', 'OP declined'],
+      ])
+      ->orWhere([
+        ['initiator_site', '=', 'Kampala'],
+        ['department', '=', 'M&E'],
+        ['status', '=', 'OP declined'],
+      ])
+      ->orderBy('date_initiated', 'DESC')
+      ->get();
+    return view('todos.hodT')->with(['todos' => $todos]);
+  }
+
   public function it()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -434,7 +464,7 @@ class TodoController extends Controller
 
   public function hr()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -454,7 +484,7 @@ class TodoController extends Controller
 
   public function miti()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -483,7 +513,7 @@ class TodoController extends Controller
 
   public function account()
   {
-    if (Auth::user()->hod != True) {
+    if (auth()->user()->hod != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -507,7 +537,7 @@ class TodoController extends Controller
 
   public function showHOD($id)
   {
-    $user = Auth::user();
+    $user = auth()->user();
     $todos = todo::find($id);
     return view('todos.showHOD')->with(['todos' => $todos, 'user' => $user]);
   }
@@ -551,7 +581,7 @@ class TodoController extends Controller
   //OP
   public function op()
   {
-    if (Auth::user()->op != True) {
+    if (auth()->user()->op != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -571,7 +601,7 @@ class TodoController extends Controller
   public function showOperation($id)
   {
     $users = User::where('md', true)->get();
-    $user = Auth::user();
+    $user = auth()->user();
     $todos = todo::find($id);
     return view('todos.showOP')->with(['todos' => $todos, 'user' => $user, 'users' => $users]);
   }
@@ -636,7 +666,7 @@ class TodoController extends Controller
   //MD
   public function mdO()
   {
-    if (Auth::user()->md != True) {
+    if (auth()->user()->md != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -650,7 +680,7 @@ class TodoController extends Controller
 
   public function mdC()
   {
-    if (Auth::user()->md != True) {
+    if (auth()->user()->md != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -664,7 +694,7 @@ class TodoController extends Controller
 
   public function showMD($id)
   {
-    $user = Auth::user();
+    $user = auth()->user();
     $todos = todo::find($id);
     return view('todos.showMD')->with(['todos' => $todos, 'user' => $user]);
   }
@@ -707,7 +737,7 @@ class TodoController extends Controller
   //FINAL
   public function final()
   {
-    if (Auth::user()->op != True) {
+    if (auth()->user()->op != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::where([
@@ -723,7 +753,7 @@ class TodoController extends Controller
 
   public function showFinal($id)
   {
-    $user = Auth::user();
+    $user = auth()->user();
     $todos = todo::find($id);
     return view('todos.showFinal')->with(['todos' => $todos, 'user' => $user]);
   }
@@ -751,7 +781,7 @@ class TodoController extends Controller
   //TRACEIPR
   public function trace()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = todo::orderBy('date_initiated', 'DESC')
@@ -762,39 +792,68 @@ class TodoController extends Controller
   //SUPPLIER
   public function supplier()
   {
-    $user = Auth::user();
+    $user = auth()->user();
     return view('todos.supplier')->with(['user' => $user]);
   }
 
   public function storeSupplier(Request $request)
   {
+    $iprs = supplier::Create([
+      'company' => $request->company, 'box' => $request->box, 'code' => $request->code,
+      'city' => $request->city, 'tel' => $request->tel, 'web' => $request->web, 'mail' => $request->mail,
+      'contact' => $request->contact, 'nature' => $request->nature, 'location' => $request->location, 'account' => $request->account,
+      'bank' => $request->bank, 'branch' => $request->branch, 'swift' => $request->swift, 'Scode' => $request->Scode,
+      'number' => $request->number, 'till' => $request->till, 'bill' => $request->bill, 'Cduration' => $request->Cduration, 'Climit' => $request->Climit,
+      'intro' => $request->intro, 'site' => $request->site, 'user_id' => auth()->id()
+    ]);
     if ($request->hasfile('image')) {
       $filename = $request->image->getClientOriginalName();
       $path = $request->image->storeAs('public/images/', $filename);
-      $iprs = supplier::Create([
-        'company' => $request->company, 'box' => $request->box, 'code' => $request->code,
-        'city' => $request->city, 'tel' => $request->tel, 'web' => $request->web, 'mail' => $request->mail,
-        'contact' => $request->contact, 'nature' => $request->nature, 'location' => $request->location, 'account' => $request->account,
-        'bank' => $request->bank, 'branch' => $request->branch, 'swift' => $request->swift, 'Scode' => $request->Scode,
-        'number' => $request->number, 'till' => $request->till, 'bill' => $request->bill, 'Cduration' => $request->Cduration, 'Climit' => $request->Climit,
-        'intro' => $request->intro, 'site' => $request->site, 'file' => $filename
-      ]);
-    } else {
-      $iprs = supplier::Create([
-        'company' => $request->company, 'box' => $request->box, 'code' => $request->code,
-        'city' => $request->city, 'tel' => $request->tel, 'web' => $request->web, 'mail' => $request->mail,
-        'contact' => $request->contact, 'nature' => $request->nature, 'location' => $request->location, 'account' => $request->account,
-        'bank' => $request->bank, 'branch' => $request->branch, 'swift' => $request->swift, 'Scode' => $request->Scode,
-        'number' => $request->number, 'till' => $request->till, 'bill' => $request->bill, 'Cduration' => $request->Cduration, 'Climit' => $request->Climit,
-        'intro' => $request->intro, 'site' => $request->site
-      ]);
+      $iprs->update(['file' => $filename]);
     }
+
     return redirect()->back()->with('message', 'Supplier Created Successfully');
+  }
+
+  public function Mysuppliers()
+  {
+    $todos = supplier::where([
+      ['user_id', '=', auth()->id()],
+    ])
+      ->get();
+    return view('todos.mysupplierT')->with(['todos' => $todos]);
+  }
+
+  public function showMySupplier($id)
+  {
+    $todos = supplier::find($id);
+    return view('todos.EditSupplier')->with(['todos' => $todos]);
+  }
+
+  public function updateMySupplier(Request $request, $id)
+  {
+    $iprs = supplier::findOrFail($id);
+    abort_if($iprs->level != 'HOD declined', 403, 'Cannot Update Unless Rejected');
+    $iprs->update([
+      'company' => $request->company, 'box' => $request->box, 'code' => $request->code,
+      'city' => $request->city, 'tel' => $request->tel, 'web' => $request->web, 'mail' => $request->mail,
+      'contact' => $request->contact, 'nature' => $request->nature, 'location' => $request->location, 'account' => $request->account,
+      'bank' => $request->bank, 'branch' => $request->branch, 'swift' => $request->swift, 'Scode' => $request->Scode,
+      'number' => $request->number, 'till' => $request->till, 'bill' => $request->bill, 'Cduration' => $request->Cduration, 'Climit' => $request->Climit,
+      'intro' => $request->intro, 'site' => $request->site, 'user_id' => auth()->id(), 'level' => 'pending'
+    ]);
+    if ($request->hasfile('image')) {
+      $filename = $request->image->getClientOriginalName();
+      $path = $request->image->storeAs('public/images/', $filename);
+      $iprs->update(['file' => $filename]);
+    }
+
+    return redirect()->back()->with('message', 'Supplier Updated Successfully');
   }
 
   public function viewSupplier()
   {
-    if (Auth::user()->md != True) {
+    if (auth()->user()->md != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = supplier::where([
@@ -802,6 +861,12 @@ class TodoController extends Controller
     ])
       ->get();
     return view('todos.supplierT')->with(['todos' => $todos]);
+  }
+
+  public function showSupplier($id)
+  {
+    $todos = supplier::find($id);
+    return view('todos.AuthSupplier')->with(['todos' => $todos]);
   }
 
   public function SupplierDoc($id)
@@ -812,22 +877,23 @@ class TodoController extends Controller
     return response()->file($path);
   }
 
-  public function updateSupplier(Request $request, $id)
+  public function updateSupplier($id)
   {
     $iprs = supplier::find($id);
     $iprs->update(['level' => 'allowed']);
     return redirect()->back()->with('message', 'Authorization Successfully');
   }
 
-  public function showSupplier($id)
+  public function rejectSupplier($id)
   {
-    $todos = supplier::find($id);
-    return view('todos.AuthSupplier')->with(['todos' => $todos]);
+    $iprs = supplier::find($id);
+    $iprs->update(['level' => 'HOD declined']);
+    return redirect()->back()->with('message', 'Authorization Successfully');
   }
 
   public function approvedSupplier()
   {
-    if (Auth::user()->slm != True) {
+    if (auth()->user()->slm != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = supplier::where([
@@ -874,7 +940,7 @@ class TodoController extends Controller
   //ADMIN
   public function administrator()
   {
-    if (Auth::user()->admin != True) {
+    if (auth()->user()->admin != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = User::get();

@@ -73,6 +73,7 @@
             <option value="Forestry">Forestry</option>
             <option value="Miti Magazines">Miti Magazine</option>
             <option value="Operations">Operations</option>
+            <option value="M&E">M&E</option>
           </select>
         </td>
         @if($user->special)

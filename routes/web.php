@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,7 @@ use Illuminate\Http\Request;
   Route::get('/ipr/HOD/Miti', 'TodoController@miti')->name('todo.miti');
   Route::get('/ipr/HOD/Communications', 'TodoController@communication')->name('todo.communication');
   Route::get('/ipr/HOD/Accounts', 'TodoController@account')->name('todo.account');
+  Route::get('/ipr/HOD/M&E', 'TodoController@ME')->name('todo.ME');
   Route::patch('/ipr/{id}/updateHOD', 'TodoController@updateHOD')->name('todo.updateHOD');
 
   //OP
@@ -72,12 +74,16 @@ use Illuminate\Http\Request;
 
   //SUPPLIER
   Route::get('/ipr/NewSupplier', 'TodoController@supplier')->name('todo.supplier');
+  Route::get('/ipr/MySuppliers', 'TodoController@Mysuppliers')->name('todo.mysuppliers');
   Route::get('/ipr/UnapprovedSuppliers', 'TodoController@viewSupplier')->name('todo.viewSupplier');
   Route::post('/ipr/createSupplier', 'TodoController@storeSupplier')->name('todo.storeSupplier');
   Route::get('/ipr/viewSupplier', 'TodoController@viewSupplier')->name('todo.viewSupplier');
   Route::get('/ipr/ApprovedSuppliers', 'TodoController@approvedSupplier')->name('todo.approvedSupplier');
   Route::patch('/ipr/{id}/AuthorizeSupplier', 'TodoController@updateSupplier')->name('todo.updateSupplier');
+  Route::patch('/ipr/{id}/RejectSupplier', 'TodoController@rejectSupplier')->name('todo.rejectSupplier');
+  Route::patch('/ipr/{id}/AmendSupplier', 'TodoController@updateMySupplier')->name('todo.updateMySupplier');
   Route::get('/ipr/{id}/SupplierDetails', 'TodoController@showSupplier')->name('todo.showSupplier');
+  Route::get('/ipr/{id}/MySupplierDetails', 'TodoController@showMySupplier')->name('todo.showMySupplier');
   Route::get('/ipr/{id}/PrintSupplier', 'TodoController@printSupplier')->name('todo.printSupplier');
   Route::get('/ipr/{id}/SupplierDocuments', 'TodoController@SupplierDoc')->name('todo.supplierdoc');
 
@@ -97,8 +103,8 @@ Route::get('/', function () {
 
 Route::post('/upload', 'UserController@uploadAvatar');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
+\illuminate\Support\Facades\Auth::loginUsingId(1);

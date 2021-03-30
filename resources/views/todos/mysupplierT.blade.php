@@ -5,7 +5,7 @@
 @include('layouts.flash')
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-success">Supplier</h6>
+    <h6 class="m-0 font-weight-bold text-success">My Suppliers</h6>
     <a href="{{route('todo.create')}}" class="navbar-nav ml-auto">
       <span class="m-0 font-weight-bold text-primary navbar-nav ml-auto"><b>Create New IPR</b> </span>
     </a>
@@ -21,18 +21,16 @@
       <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
         <thead class="text-white" style="background-color:#007e33">
           <tr>
-            <th>Introduced By</th>
-            <th>Site</th>
             <th>Company Name</th>
+            <th>Status</th>
             <th>View</th>
           </tr>
         </thead>
         @foreach($todos as $t)
         <tr>
-          <td>{{ $t->intro}}</td>
-          <td>{{ $t->site }}</td>
           <td>{{ $t->company }}</td>
-          <td><a href="{{route('todo.showSupplier',$t->id)}}">View</a></td>
+          <td>{{ $t->level }}</td>
+          <td><a href="{{route('todo.showMySupplier',$t->id)}}">View</a></td>
         </tr>
         @endforeach
         </tbody>

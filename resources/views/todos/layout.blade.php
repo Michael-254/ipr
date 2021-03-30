@@ -104,6 +104,7 @@
             <a class="collapse-item" href="{{route('todo.hr')}}">Human Resources</a>
             <a class="collapse-item" href="{{route('todo.miti')}}">Miti Magazine</a>
             <a class="collapse-item" href="{{route('todo.operation')}}">Operations</a>
+            <a class="collapse-item" href="{{route('todo.ME')}}">M&E</a>
           </div>
         </div>
       </li>
@@ -192,10 +193,7 @@
               @else
               <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                  {{ Auth::user()->name }}
-                  @if(Auth::user()->avatar)
-                  <img src="<?php echo asset("/storage/images/" . Auth::user()->avatar) ?>" alt="avatar" width="40">
-                  @endif
+                  {{ auth()->user()->name }}
                   <span class="caret"></span>
                 </a>
 
