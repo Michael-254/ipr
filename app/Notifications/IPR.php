@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,15 +11,17 @@ use Illuminate\Notifications\Notification;
 class IPR extends Notification
 {
     use Queueable;
-
+    private $sender;
+    public $iprs;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $sender,$iprs)
     {
-        //
+        $this->sender = $sender;
+        $this->iprs  = $iprs;
     }
 
     /**
@@ -41,7 +44,9 @@ class IPR extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('New IPR on The System For Your Approval.')
+                    ->subject('New IPR')
+                    ->line($this->sender->name.' '.'has submitted an IPR on The System For Your Approval')
+                    ->line('Ref No:'.' '.$this->iprs->id )
                     ->action('View IPR', url('/'))
                     ->line('Thank you');
     }

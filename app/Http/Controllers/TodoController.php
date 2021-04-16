@@ -127,7 +127,7 @@ class TodoController extends Controller
     }
     $reviewer = $request->reviewer;
     Notification::route('mail', $reviewer)
-      ->notify(new IPR);
+      ->notify(new IPR(auth()->user(), $iprs));
     Alert::success('All good', 'IPR Created Successfullly');
     return redirect()->back();
   }
@@ -317,7 +317,7 @@ class TodoController extends Controller
     if ($request->status == 'SLM approved') {
       $reviewer = $request->reviewer;
       Notification::route('mail', $reviewer)
-        ->notify(new IPR);
+        ->notify(new IPR(auth()->user(), $todos));
     } else {
       $reviewer = $request->email;
       $data = [
@@ -647,7 +647,7 @@ class TodoController extends Controller
     if ($request->status == 'OP approved') {
       $reviewer = $request->reviewer;
       Notification::route('mail', $reviewer)
-        ->notify(new IPR);
+        ->notify(new IPR(auth()->user(), $todos));
     } else {
       $reviewer = $request->slmM;
       $initiator = $request->email;
@@ -893,7 +893,7 @@ class TodoController extends Controller
 
   public function approvedSupplier()
   {
-    if (auth()->user()->slm != True) {
+    if (auth()->user()->op != True) {
       return redirect()->back()->with('error', 'Denied Access');
     }
     $todos = supplier::where([

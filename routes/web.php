@@ -107,4 +107,3 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-\illuminate\Support\Facades\Auth::loginUsingId(1);
