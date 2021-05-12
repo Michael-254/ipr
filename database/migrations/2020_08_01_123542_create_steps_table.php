@@ -14,7 +14,7 @@ class CreateStepsTable extends Migration
     public function up()
     {
         Schema::create('steps', function (Blueprint $table) {
-            $table->id();
+              $table->id();
               $table->unsignedBigInteger('todo_id');
               $table->foreign('todo_id')->references('id')->on('todos');
               $table->string('step')->nullable();

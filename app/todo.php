@@ -26,4 +26,10 @@ public function image()
 {
 return $this->hasMany(image::class);
 }
+
+public function owner()
+{
+return $this->belongsTo(User::class,'user_id');
+}
+
 }

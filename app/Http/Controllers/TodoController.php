@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use App\todo;
 use App\step;
 use App\User;
 use App\image;
 use App\supplier;
 use App\Notifications\IPR;
-use Storage;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreBlogPost;
-use Auth;
 use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Notification;
@@ -789,6 +785,16 @@ class TodoController extends Controller
     return view('todos.traceT')->with(['todos' => $todos]);
   }
 
+  //DESTROYIPR
+  public function destroy($id)
+  {
+    $todo = todo::findOrFail($id);
+    $todo->image()->delete();
+    $todo->step()->delete();
+    $todo->delete();
+    return back()->with('message', 'Deleted');
+  }
+
   //SUPPLIER
   public function supplier()
   {
@@ -935,6 +941,22 @@ class TodoController extends Controller
     $filename = $todos->image;
     $path = storage_path('app/public/images/' . $filename);
     return response()->file($path);
+  }
+
+  //FILEDESTROY
+  public function fileDestroy($id)
+  {
+    abort_if(!auth()->user()->op, 404, 'Unauthorized action');
+
+    $todos = image::findOrFail($id);
+    $filename = $todos->image;
+    $path = storage_path('app/public/images/' . $filename);
+    if ($path) {
+      unlink($path);
+    }
+    $todos->delete();
+    Alert::success('All good', 'Item Deleted');
+    return back();
   }
 
   //ADMIN
